@@ -22,7 +22,7 @@
 
   <meta name="description" content="在學習的期間看到了使用puts、print還有p來列印出文字訊息或是查看物件的值，但是對於什麼時候該用print，什麼時後用puts和p實在是有點模糊，所以寫一篇文章來區分這三者的差別。 Print vs Puts印值首先是print，按字面意思來看就是列印。那效果呢？ 123print &quot;123&quot;print &quot;456&quot;print &quot;789&amp;quo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RUBY| Puts,Print &amp; P 之間的差異">
+<meta property="og:title" content="Ruby | Puts,Print &amp; P 之間的差異">
 <meta property="og:url" content="http://example.com/2023/11/21/differenceBetweenP/index.html">
 <meta property="og:site_name" content="Coding Journey">
 <meta property="og:description" content="在學習的期間看到了使用puts、print還有p來列印出文字訊息或是查看物件的值，但是對於什麼時候該用print，什麼時後用puts和p實在是有點模糊，所以寫一篇文章來區分這三者的差別。 Print vs Puts印值首先是print，按字面意思來看就是列印。那效果呢？ 123print &quot;123&quot;print &quot;456&quot;print &quot;789&amp;quo">
@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://example.com/uploads/20231121/%E6%88%AA%E5%9C%96%202023-11-22%20%E4%B8%8A%E5%8D%8812.22.50.png">
 <meta property="og:image" content="http://example.com/uploads/20231121/%E6%88%AA%E5%9C%96%202023-11-22%20%E4%B8%8A%E5%8D%8812.21.45.png">
 <meta property="article:published_time" content="2023-11-21T14:00:46.000Z">
-<meta property="article:modified_time" content="2023-11-21T17:01:29.398Z">
+<meta property="article:modified_time" content="2023-11-21T17:17:31.310Z">
 <meta property="article:author" content="Ennis Hong">
 <meta property="article:tag" content="Ruby">
 <meta property="article:tag" content="puts">
@@ -52,7 +52,7 @@
   };
 </script>
 
-  <title>RUBY| Puts,Print & P 之間的差異 | Coding Journey</title>
+  <title>Ruby | Puts,Print & P 之間的差異 | Coding Journey</title>
   
 
 
@@ -185,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          RUBY| Puts,Print & P 之間的差異
+          Ruby | Puts,Print & P 之間的差異
         </h1>
 
         <div class="post-meta">
@@ -202,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-11-22 01:01:29" itemprop="dateModified" datetime="2023-11-22T01:01:29+08:00">2023-11-22</time>
+                <time title="Modified: 2023-11-22 01:17:31" itemprop="dateModified" datetime="2023-11-22T01:17:31+08:00">2023-11-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -243,13 +243,31 @@
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">puts [<span class="string">&quot;A&quot;</span>,<span class="literal">nil</span>,<span class="string">&quot;B&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 結果：</span></span><br><span class="line">A</span><br><span class="line"></span><br><span class="line">B</span><br><span class="line"></span><br><span class="line">print [<span class="string">&quot;a&quot;</span>,<span class="literal">nil</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 結果：</span></span><br><span class="line">[<span class="string">&quot;a&quot;</span>, <span class="literal">nil</span>]</span><br></pre></td></tr></table></figure>
 
 <p>上述結果可以看出<code>puts</code>印<code>nil</code>會印出空字串(Empty String)，<code>print</code>將整個陣列以字串印出。</p>
-<p>那<code>print</code>單獨印<code>nil</code>呢？</p>
+<p>那<code>print</code> 單獨印<code>nil</code>呢？</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">print <span class="string">&quot;c&quot;</span></span><br><span class="line">print <span class="literal">nil</span></span><br><span class="line">print <span class="string">&quot;d&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 結果：</span></span><br><span class="line">cd</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><figcaption><span>``` 印 ``` nil ``` 也是一樣會印出空字串(Empty String)。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">以上面的結果做個總結：</span><br><span class="line"></span><br><span class="line">- **print &amp; puts**</span><br><span class="line">  - 嘗試將所有內容轉換為字串（```to_s```），印```nil```會印出空白內容。</span><br><span class="line">- **print** </span><br><span class="line">  - 不會換行</span><br><span class="line">- **puts**</span><br><span class="line">  - 會換行</span><br><span class="line">  - 列印陣列時會將內容值依序換行印出。</span><br><span class="line"></span><br><span class="line">### 返回值</span><br><span class="line">```ruby</span><br><span class="line">print 123 # nil</span><br><span class="line">puts 123 #nil</span><br></pre></td></tr></table></figure>
+<p>顯然<code>print</code> 印 <code>nil</code>也是一樣會印出空字串(Empty String)。</p>
+<p>以上面的結果做個總結：</p>
+<ul>
+<li><strong>print &amp; puts</strong><ul>
+<li>嘗試將所有內容轉換為字串（<code>to_s</code>），印<code>nil</code>會印出空白內容。</li>
+</ul>
+</li>
+<li><strong>print</strong> <ul>
+<li>不會換行</li>
+</ul>
+</li>
+<li><strong>puts</strong><ul>
+<li>會換行</li>
+<li>列印陣列時會將內容值依序換行印出。</li>
+</ul>
+</li>
+</ul>
+<h3 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">print <span class="number">123</span> </span><br><span class="line"><span class="comment"># nil</span></span><br><span class="line">puts <span class="number">123</span> </span><br><span class="line"><span class="comment">#nil</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <p><img src="/../uploads/20231121/%E6%88%AA%E5%9C%96%202023-11-22%20%E4%B8%8A%E5%8D%8812.22.50.png" alt="Alt text"></p>
 <ul>
-<li><code>print</code>和<code>puts</code>的返回值都是<code>nil</code></li>
+<li><code>print</code> 和 <code>puts</code> 的返回值都是 <code>nil</code></li>
 </ul>
 <h2 id="Puts-vs-P"><a href="#Puts-vs-P" class="headerlink" title="Puts vs P"></a>Puts vs P</h2><h3 id="印值-1"><a href="#印值-1" class="headerlink" title="印值"></a>印值</h3><blockquote>
 <p>p is a method that shows a more “raw” version of an object.<br>p 是一種顯示物件更「原始」版本的方法。</p>
@@ -262,7 +280,7 @@
 <li><code>p</code>和<code>puts</code>都會在印出內容後面加上換行符號。</li>
 <li><code>p</code>會印出型態樣式。</li>
 </ul>
-<h3 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print <span class="number">123</span> <span class="comment"># nil</span></span><br><span class="line">puts <span class="number">123</span> <span class="comment"># nil</span></span><br><span class="line">p <span class="number">123</span> <span class="comment"># 123</span></span><br></pre></td></tr></table></figure>
+<h3 id="返回值-1"><a href="#返回值-1" class="headerlink" title="返回值"></a>返回值</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print <span class="number">123</span> <span class="comment"># nil</span></span><br><span class="line">puts <span class="number">123</span> <span class="comment"># nil</span></span><br><span class="line">p <span class="number">123</span> <span class="comment"># 123</span></span><br></pre></td></tr></table></figure>
 <p><img src="/../uploads/20231121/%E6%88%AA%E5%9C%96%202023-11-22%20%E4%B8%8A%E5%8D%8812.21.45.png" alt="Alt text"></p>
 <ul>
 <li><code>print</code>返回<code>nil</code>。</li>
@@ -388,7 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Print-vs-Puts"><span class="nav-number">1.</span> <span class="nav-text">Print vs Puts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B0%E5%80%BC"><span class="nav-number">1.1.</span> <span class="nav-text">印值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Puts-vs-P"><span class="nav-number">2.</span> <span class="nav-text">Puts vs P</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B0%E5%80%BC-1"><span class="nav-number">2.1.</span> <span class="nav-text">印值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">2.2.</span> <span class="nav-text">返回值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%AE%E7%95%B0%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">差異表</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Print-vs-Puts"><span class="nav-number">1.</span> <span class="nav-text">Print vs Puts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B0%E5%80%BC"><span class="nav-number">1.1.</span> <span class="nav-text">印值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">1.2.</span> <span class="nav-text">返回值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Puts-vs-P"><span class="nav-number">2.</span> <span class="nav-text">Puts vs P</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B0%E5%80%BC-1"><span class="nav-number">2.1.</span> <span class="nav-text">印值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-1"><span class="nav-number">2.2.</span> <span class="nav-text">返回值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%AE%E7%95%B0%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">差異表</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
