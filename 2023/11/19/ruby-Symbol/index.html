@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在 Ruby 中有許多的型態  Integer Float String Array Hash Symbol Boolean Regular Expression Class Module Range  今天要來說一下 Symbol，這個對我來說非常陌生的型態。那「Symbol」是什麼呢? 它翻譯叫符號… 在 Ruby 中的 Symbol 長這樣: 12:name#冒號加上自定義名  Symbol">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ruby | Symbol">
+<meta property="og:url" content="http://example.com/2023/11/19/ruby-Symbol/index.html">
+<meta property="og:site_name" content="Coding Journey">
+<meta property="og:description" content="在 Ruby 中有許多的型態  Integer Float String Array Hash Symbol Boolean Regular Expression Class Module Range  今天要來說一下 Symbol，這個對我來說非常陌生的型態。那「Symbol」是什麼呢? 它翻譯叫符號… 在 Ruby 中的 Symbol 長這樣: 12:name#冒號加上自定義名  Symbol">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-19T13:32:50.000Z">
+<meta property="article:modified_time" content="2023-11-20T14:17:52.211Z">
+<meta property="article:author" content="Ennis Hong">
+<meta property="article:tag" content="Ruby">
+<meta property="article:tag" content="Symbol">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/11/19/ruby-Symbol/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Ruby | Symbol | Coding Journey</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Coding Journey</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <a>
+        <img class="custom-logo-image" src="/uploads/lion.ico" alt="Coding Journey">
+      </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/19/ruby-Symbol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ennis Hong">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coding Journey">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ruby | Symbol
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-11-19 21:32:50" itemprop="dateCreated datePublished" datetime="2023-11-19T21:32:50+08:00">2023-11-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-11-20 22:17:52" itemprop="dateModified" datetime="2023-11-20T22:17:52+08:00">2023-11-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ruby/" itemprop="url" rel="index"><span itemprop="name">Ruby</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在 Ruby 中有許多的型態</p>
+<ul>
+<li>Integer</li>
+<li>Float</li>
+<li>String</li>
+<li>Array</li>
+<li>Hash</li>
+<li>Symbol</li>
+<li>Boolean</li>
+<li>Regular Expression</li>
+<li>Class</li>
+<li>Module</li>
+<li>Range</li>
+</ul>
+<p>今天要來說一下 Symbol，這個對我來說非常陌生的型態。<br>那「Symbol」是什麼呢? 它翻譯叫符號…</p>
+<p>在 Ruby 中的 Symbol 長這樣:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:name</span></span><br><span class="line"><span class="comment">#冒號加上自定義名</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Symbol-的特性是"><a href="#Symbol-的特性是" class="headerlink" title="Symbol 的特性是"></a>Symbol 的特性是</h2><p><strong><font color=#FF0000>1. 唯一性</font></strong></p>
+<p><strong><font color=#FF0000>2. 不可變</font></strong></p>
+<p>一旦創建了之後就不能改變它的值且記憶體位置不變。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:name</span></span><br><span class="line">name = <span class="symbol">:name</span></span><br><span class="line">p <span class="symbol">:name</span>.object_id <span class="comment"># 72028</span></span><br><span class="line">p name.object_id <span class="comment"># 72028</span></span><br></pre></td></tr></table></figure>
+
+<p>當我們試著想改變它</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:name</span> = <span class="number">123</span></span><br><span class="line"><span class="comment"># 出現錯誤 syntax error, unexpected &#x27;=&#x27;, expecting end-of-input</span></span><br></pre></td></tr></table></figure>
+
+<p>符號不能被改變，但是字串可以</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tempStr = <span class="string">&quot;test&quot;</span></span><br><span class="line">p tempStr.object_id <span class="comment"># 179600</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改文字內容</span></span><br><span class="line">tempStr.insert(<span class="number">1</span>, <span class="string">&#x27;bar&#x27;</span>)</span><br><span class="line">p tempStr <span class="comment"># tbarst</span></span><br><span class="line">p tempStr.object_id <span class="comment"># 179600</span></span><br></pre></td></tr></table></figure>
+
+<p>由上述程式碼結果可知文字即使被修改了，記憶體位置仍相同。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p <span class="string">&quot;hello&quot;</span>.object_id <span class="comment">#285160</span></span><br><span class="line">p <span class="string">&quot;hello&quot;</span>.object_id <span class="comment">#288980</span></span><br><span class="line">p <span class="string">&quot;hello&quot;</span>.object_id <span class="comment">#292800</span></span><br></pre></td></tr></table></figure>
+
+<p>字串可以被創建很多次，但是每次創建都會指向新的記憶體位置。</p>
+<h2 id="適用情境"><a href="#適用情境" class="headerlink" title="適用情境"></a>適用情境</h2><p>那既不能修改也沒有具體的值那什麼時候可以用呢?<br>以訂單狀態來舉例好了，假設訂單有狀態為待處理(pending)、完成(complete)。</p>
+<ol>
+<li>使用字串</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Order</span></span><br><span class="line">    <span class="built_in">attr_reader</span> <span class="symbol">:status</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initialize</span>(<span class="params">items, status = <span class="string">&quot;pending&quot;</span></span>)</span><br><span class="line">      <span class="variable">@items</span> = items</span><br><span class="line">      <span class="variable">@status</span> = status</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">compete</span></span><br><span class="line">      <span class="variable">@status</span> = <span class="string">&quot;complete&quot;</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  order = <span class="title class_">Order</span>.new([<span class="string">&quot;item A&quot;</span>, <span class="string">&quot;item B&quot;</span>, <span class="string">&quot;item C&quot;</span>])</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> order.status == <span class="string">&quot;pending&quot;</span></span><br><span class="line">    puts <span class="string">&quot;order is pending&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  order.compete</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> order.status == <span class="string">&quot;complete&quot;</span></span><br><span class="line">    puts <span class="string">&quot;order is complete&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用 Symbol</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Order</span></span><br><span class="line">    <span class="built_in">attr_reader</span> <span class="symbol">:status</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initialize</span>(<span class="params">items, status = <span class="symbol">:pending</span></span>)</span><br><span class="line">      <span class="variable">@items</span> = items</span><br><span class="line">      <span class="variable">@status</span> = status</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">compete</span></span><br><span class="line">      <span class="variable">@status</span> = <span class="symbol">:complete</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  order = <span class="title class_">Order</span>.new([<span class="string">&quot;item A&quot;</span>, <span class="string">&quot;item B&quot;</span>, <span class="string">&quot;item C&quot;</span>])</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> order.status == <span class="symbol">:pending</span></span><br><span class="line">    puts <span class="string">&quot;order is pending&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  order.compete</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> order.status == <span class="symbol">:complete</span></span><br><span class="line">    puts <span class="string">&quot;order is complete&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>上面兩個在結果上來看是差不多的，但是如果今天有很多個訂單實例，那每一個訂單的狀態都指向一個新的字串就可能會造成記憶體的浪費。</p>
+<p>如果是使用 Symbol，即使訂單數量多了，狀態指向的 Symbol 都是同一個位置這樣就不會造成記憶體浪費了。</p>
+<p>雖然說 Symbol 可以降低記憶體空間的浪費，<font color=#FF0000>But!</font>不是所有的字串都改成用 Symbol 唷!</p>
+<h2 id="回收機制-Garbage-Collection"><a href="#回收機制-Garbage-Collection" class="headerlink" title="回收機制(Garbage Collection)"></a>回收機制(Garbage Collection)</h2><p>字串等其他型態會在程式運行期間就可能會被回收，</p>
+<p><strong>Symbol 從程式開始執行就會生成一直存在直到程式結束運行!</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Ruby/" rel="tag"># Ruby</a>
+              <a href="/tags/Symbol/" rel="tag"># Symbol</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/11/20/vsSetRubyIndent/" rel="next" title="VS Code | 修改 Ruby Tab縮排">
+      VS Code | 修改 Ruby Tab縮排 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Symbol-%E7%9A%84%E7%89%B9%E6%80%A7%E6%98%AF"><span class="nav-number">1.</span> <span class="nav-text">Symbol 的特性是</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E6%83%85%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">適用情境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E6%94%B6%E6%A9%9F%E5%88%B6-Garbage-Collection"><span class="nav-number">3.</span> <span class="nav-text">回收機制(Garbage Collection)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ennis Hong</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ennis-hong" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ennis-hong" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:kugi7821@gmail.com" title="E-Mail → mailto:kugi7821@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ennis Hong</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
