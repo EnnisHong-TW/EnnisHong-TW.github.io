@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="將網站部屬在Fly.io首先在Fly.io上註冊帳號接著在專案內使用 1$ flyctl auth login 登入Fly.io這會開啟Fly.io的網站讓你選取你要使用的帳號 接著在專案內使用指令 1$ fly launch 這個指令會掃描你的程式碼並使用預設的規格 沒有要進行修改輸入n就可以了。如果想要修改可以輸入y來進行修改, 接著一樣會開啟Fly.io的設定畫面： 可以根據自己的需求進行調">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deploy | Fly.io">
+<meta property="og:url" content="http://example.com/2024/01/12/flyio-deployment/index.html">
+<meta property="og:site_name" content="Coding Journey">
+<meta property="og:description" content="將網站部屬在Fly.io首先在Fly.io上註冊帳號接著在專案內使用 1$ flyctl auth login 登入Fly.io這會開啟Fly.io的網站讓你選取你要使用的帳號 接著在專案內使用指令 1$ fly launch 這個指令會掃描你的程式碼並使用預設的規格 沒有要進行修改輸入n就可以了。如果想要修改可以輸入y來進行修改, 接著一樣會開啟Fly.io的設定畫面： 可以根據自己的需求進行調">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/uploads/flyio/image.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/image-1.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/image-3.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/image-2.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/generate_server.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/databaseurl.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/initcomplete.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/flytoml.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/docker_deploy.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/ssh_git.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/secrets.png">
+<meta property="og:image" content="http://example.com/uploads/flyio/secrets_setting.png">
+<meta property="article:published_time" content="2024-01-12T09:22:20.000Z">
+<meta property="article:modified_time" content="2024-01-30T10:26:12.575Z">
+<meta property="article:author" content="Ennis Hong">
+<meta property="article:tag" content="deploy,docker,fly.io">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/uploads/flyio/image.png">
+
+<link rel="canonical" href="http://example.com/2024/01/12/flyio-deployment/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Deploy | Fly.io | Coding Journey</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Coding Journey</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <a>
+        <img class="custom-logo-image" src="/uploads/lion.ico" alt="Coding Journey">
+      </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/12/flyio-deployment/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ennis Hong">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coding Journey">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deploy | Fly.io
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-12 17:22:20" itemprop="dateCreated datePublished" datetime="2024-01-12T17:22:20+08:00">2024-01-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-30 18:26:12" itemprop="dateModified" datetime="2024-01-30T18:26:12+08:00">2024-01-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ruby-On-Rails/" itemprop="url" rel="index"><span itemprop="name">Ruby On Rails</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="將網站部屬在Fly-io"><a href="#將網站部屬在Fly-io" class="headerlink" title="將網站部屬在Fly.io"></a>將網站部屬在Fly.io</h1><p>首先在Fly.io上註冊帳號<br>接著在專案內使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ flyctl auth login</span><br></pre></td></tr></table></figure>
+<p>登入Fly.io<br>這會開啟Fly.io的網站讓你選取你要使用的帳號</p>
+<p>接著在專案內使用指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly launch</span><br></pre></td></tr></table></figure>
+<p>這個指令會掃描你的程式碼並使用預設的規格<br><img src="/../uploads/flyio/image.png" alt="Alt text"></p>
+<p>沒有要進行修改輸入<code>n</code>就可以了。<br>如果想要修改可以輸入<code>y</code>來進行修改, 接著一樣會開啟Fly.io的設定畫面：<br><img src="/../uploads/flyio/image-1.png" alt="Alt text"></p>
+<p>可以根據自己的需求進行調整，<br>像是App名稱(Fly.io產生的網址會以此生成)、<br>主要部屬伺服器所在位置、<br>需要的cpu、記憶體、資料庫、Redis等等設定。</p>
+<p><img src="/../uploads/flyio/image-3.png" alt="Alt text"></p>
+<p>建議可以將伺服器所在位置選擇離自己主要使用的區域進一點，例如香港或是日本，其他的根據部屬的程式需求進行配置就可以。<br>留意資料庫的設定會預設Production，如果不需要這麼高的配置也可以調整成Development。<br><img src="/../uploads/flyio/image-2.png" alt="Alt text"></p>
+<p>設定完成點最下方的按鈕就可以了，回到VSCode查看可以看到開始根據設定進行初始化<br><img src="/../uploads/flyio/generate_server.png" alt="Alt text"></p>
+<p>其中有一個很重要的是資料庫連線，這邊是fly.io在建立資料庫的時候自動設定的，資料庫可以和app一起初始化當然也可以分開進行設定，所以這個DATABASE_URL就會變得很重要了!!!建議保存好這個資訊。<br><img src="/../uploads/flyio/databaseurl.png" alt="Alt text"></p>
+<p>初始化完成之後可以回到Fly.io上看到有兩個服務一個是資料庫一個是我們的應用程式。<br><img src="/../uploads/flyio/initcomplete.png" alt="Alt text"></p>
+<p>除了這些之外專案內多了一個fly.toml的檔案，裡面是部屬在flyio上的一些基本的設定包含部屬的服務名稱等等，<br>在這邊也可以加上一些環境變數放在[env]內這樣部屬的時候就會將這些環境變數設定上去。<br><strong>注意!!!請不要將密碼等重要資訊放在這個檔案尤其是需要將source code上傳至網路上</strong><br><img src="/../uploads/flyio/flytoml.png" alt="Alt text"></p>
+<p>當然部署還沒有完成呢~<br>接著要使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly deploy</span><br></pre></td></tr></table></figure>
+
+<p>執行後可以看到其實部屬到Flyio是透過Docker的方式進行<br><img src="/../uploads/flyio/docker_deploy.png" alt="Alt text"></p>
+<p>在執行deploy途中如果有發生什麼錯誤就需要針對專案內的Dockerfile進行修正，<br>像是我在別的平台嘗試部屬時曾經遇到問題是yarn.lock檔內有依賴包無法取得的問題:<br><img src="/../uploads/flyio/ssh_git.png" alt="Alt text"></p>
+<p>我試過可行的做法是將產生的url從ssh改成https的方式進行連線，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global url.https://github.com/.insteadOf git@github.com:</span><br></pre></td></tr></table></figure>
+<p>刪除yarn.lock檔，使用<code>$ yarn install</code>重新產生yarn.lock檔。</p>
+<blockquote>
+<p>剛剛在整理文章的時候發現或許和GitHub三月的時候更新了ssh-key有關</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.blog/2023-03-23-we-updated-our-rsa-ssh-host-key/">https://github.blog/2023-03-23-we-updated-our-rsa-ssh-host-key/</a></p>
+</blockquote>
+</blockquote>
+<p>接著因為在專案開發時有使用到credentials所以我需要在Fly.io上設定key讓程式能夠使用<br>可以透過指令的方式或是Fly.io網站內提供的設定方式進行<br>網頁可以到Dashboard上找到要設定的服務<br><img src="/../uploads/flyio/secrets.png" alt="Alt text"></p>
+<p>在左側選單可以看到”Secrets”，裡面有兩個設定一個是資料庫連線一個是RAILS_MASTER_KEY:<br><img src="/../uploads/flyio/secrets_setting.png" alt="Alt text"></p>
+<p>可以修改RAILS_MASTER_KEY的值更新成使用的credentials私鑰即可。</p>
+<h2 id="查看Console指令"><a href="#查看Console指令" class="headerlink" title="查看Console指令"></a>查看Console指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly ssh console --pty -C <span class="string">&quot;/rails/bin/rails console&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="增加環境變數指令"><a href="#增加環境變數指令" class="headerlink" title="增加環境變數指令"></a>增加環境變數指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly secrets <span class="built_in">set</span> DATABASE_URL=xxx</span><br></pre></td></tr></table></figure>
+
+<h2 id="資料庫連線指令"><a href="#資料庫連線指令" class="headerlink" title="資料庫連線指令"></a>資料庫連線指令</h2><p>如果有需要連線進入資料庫，可以使用指令將自己的電腦變成代理伺服的方式進入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly proxy 5432 -a rest-db</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改服務數量"><a href="#修改服務數量" class="headerlink" title="修改服務數量"></a>修改服務數量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly scale count 2</span><br></pre></td></tr></table></figure>
+<p>如果當前服務數為2下指令為4會增加兩個服務,<br>反之如果當前服務為4下指令更改為2會減少兩個服務。</p>
+<h2 id="修改規格"><a href="#修改規格" class="headerlink" title="修改規格"></a>修改規格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly scale vm shared-cpu-2x</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改記憶體規格"><a href="#修改記憶體規格" class="headerlink" title="修改記憶體規格"></a>修改記憶體規格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly scale memory 1024</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看Fly-io所有規格"><a href="#查看Fly-io所有規格" class="headerlink" title="查看Fly.io所有規格"></a>查看Fly.io所有規格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly platform vm-sizes</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>參考資料<br><a target="_blank" rel="noopener" href="https://fly.io/docs/rails/getting-started/">fly.io官網</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deploy-docker-fly-io/" rel="tag"># deploy,docker,fly.io</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/11/21/differenceBetweenP/" rel="prev" title="Ruby | Puts,Print & P 之間的差異">
+      <i class="fa fa-chevron-left"></i> Ruby | Puts,Print & P 之間的差異
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%87%E7%B6%B2%E7%AB%99%E9%83%A8%E5%B1%AC%E5%9C%A8Fly-io"><span class="nav-number">1.</span> <span class="nav-text">將網站部屬在Fly.io</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8BConsole%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">查看Console指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E6%8C%87%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">增加環境變數指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E5%BA%AB%E9%80%A3%E7%B7%9A%E6%8C%87%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">資料庫連線指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%8D%E5%8B%99%E6%95%B8%E9%87%8F"><span class="nav-number">1.4.</span> <span class="nav-text">修改服務數量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%A6%8F%E6%A0%BC"><span class="nav-number">1.5.</span> <span class="nav-text">修改規格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%A8%98%E6%86%B6%E9%AB%94%E8%A6%8F%E6%A0%BC"><span class="nav-number">1.6.</span> <span class="nav-text">修改記憶體規格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8BFly-io%E6%89%80%E6%9C%89%E8%A6%8F%E6%A0%BC"><span class="nav-number">1.7.</span> <span class="nav-text">查看Fly.io所有規格</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ennis Hong</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ennis-hong" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ennis-hong" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:kugi7821@gmail.com" title="E-Mail → mailto:kugi7821@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2023 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ennis Hong</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

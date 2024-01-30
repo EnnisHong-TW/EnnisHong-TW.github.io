@@ -160,6 +160,128 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/01/12/flyio-deployment/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ennis Hong">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coding Journey">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/12/flyio-deployment/" class="post-title-link" itemprop="url">Deploy | Fly.io</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-12 17:22:20" itemprop="dateCreated datePublished" datetime="2024-01-12T17:22:20+08:00">2024-01-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-30 18:26:12" itemprop="dateModified" datetime="2024-01-30T18:26:12+08:00">2024-01-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ruby-On-Rails/" itemprop="url" rel="index"><span itemprop="name">Ruby On Rails</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="將網站部屬在Fly-io"><a href="#將網站部屬在Fly-io" class="headerlink" title="將網站部屬在Fly.io"></a>將網站部屬在Fly.io</h1><p>首先在Fly.io上註冊帳號<br>接著在專案內使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ flyctl auth login</span><br></pre></td></tr></table></figure>
+<p>登入Fly.io<br>這會開啟Fly.io的網站讓你選取你要使用的帳號</p>
+<p>接著在專案內使用指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly launch</span><br></pre></td></tr></table></figure>
+<p>這個指令會掃描你的程式碼並使用預設的規格<br><img src="/../uploads/flyio/image.png" alt="Alt text"></p>
+<p>沒有要進行修改輸入<code>n</code>就可以了。<br>如果想要修改可以輸入<code>y</code>來進行修改, 接著一樣會開啟Fly.io的設定畫面：<br><img src="/../uploads/flyio/image-1.png" alt="Alt text"></p>
+<p>可以根據自己的需求進行調整，<br>像是App名稱(Fly.io產生的網址會以此生成)、<br>主要部屬伺服器所在位置、<br>需要的cpu、記憶體、資料庫、Redis等等設定。</p>
+<p><img src="/../uploads/flyio/image-3.png" alt="Alt text"></p>
+<p>建議可以將伺服器所在位置選擇離自己主要使用的區域進一點，例如香港或是日本，其他的根據部屬的程式需求進行配置就可以。<br>留意資料庫的設定會預設Production，如果不需要這麼高的配置也可以調整成Development。<br><img src="/../uploads/flyio/image-2.png" alt="Alt text"></p>
+<p>設定完成點最下方的按鈕就可以了，回到VSCode查看可以看到開始根據設定進行初始化<br><img src="/../uploads/flyio/generate_server.png" alt="Alt text"></p>
+<p>其中有一個很重要的是資料庫連線，這邊是fly.io在建立資料庫的時候自動設定的，資料庫可以和app一起初始化當然也可以分開進行設定，所以這個DATABASE_URL就會變得很重要了!!!建議保存好這個資訊。<br><img src="/../uploads/flyio/databaseurl.png" alt="Alt text"></p>
+<p>初始化完成之後可以回到Fly.io上看到有兩個服務一個是資料庫一個是我們的應用程式。<br><img src="/../uploads/flyio/initcomplete.png" alt="Alt text"></p>
+<p>除了這些之外專案內多了一個fly.toml的檔案，裡面是部屬在flyio上的一些基本的設定包含部屬的服務名稱等等，<br>在這邊也可以加上一些環境變數放在[env]內這樣部屬的時候就會將這些環境變數設定上去。<br><strong>注意!!!請不要將密碼等重要資訊放在這個檔案尤其是需要將source code上傳至網路上</strong><br><img src="/../uploads/flyio/flytoml.png" alt="Alt text"></p>
+<p>當然部署還沒有完成呢~<br>接著要使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly deploy</span><br></pre></td></tr></table></figure>
+
+<p>執行後可以看到其實部屬到Flyio是透過Docker的方式進行<br><img src="/../uploads/flyio/docker_deploy.png" alt="Alt text"></p>
+<p>在執行deploy途中如果有發生什麼錯誤就需要針對專案內的Dockerfile進行修正，<br>像是我在別的平台嘗試部屬時曾經遇到問題是yarn.lock檔內有依賴包無法取得的問題:<br><img src="/../uploads/flyio/ssh_git.png" alt="Alt text"></p>
+<p>我試過可行的做法是將產生的url從ssh改成https的方式進行連線，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global url.https://github.com/.insteadOf git@github.com:</span><br></pre></td></tr></table></figure>
+<p>刪除yarn.lock檔，使用<code>$ yarn install</code>重新產生yarn.lock檔。</p>
+<blockquote>
+<p>剛剛在整理文章的時候發現或許和GitHub三月的時候更新了ssh-key有關</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.blog/2023-03-23-we-updated-our-rsa-ssh-host-key/">https://github.blog/2023-03-23-we-updated-our-rsa-ssh-host-key/</a></p>
+</blockquote>
+</blockquote>
+<p>接著因為在專案開發時有使用到credentials所以我需要在Fly.io上設定key讓程式能夠使用<br>可以透過指令的方式或是Fly.io網站內提供的設定方式進行<br>網頁可以到Dashboard上找到要設定的服務<br><img src="/../uploads/flyio/secrets.png" alt="Alt text"></p>
+<p>在左側選單可以看到”Secrets”，裡面有兩個設定一個是資料庫連線一個是RAILS_MASTER_KEY:<br><img src="/../uploads/flyio/secrets_setting.png" alt="Alt text"></p>
+<p>可以修改RAILS_MASTER_KEY的值更新成使用的credentials私鑰即可。</p>
+<h2 id="查看Console指令"><a href="#查看Console指令" class="headerlink" title="查看Console指令"></a>查看Console指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly ssh console --pty -C <span class="string">&quot;/rails/bin/rails console&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="增加環境變數指令"><a href="#增加環境變數指令" class="headerlink" title="增加環境變數指令"></a>增加環境變數指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly secrets <span class="built_in">set</span> DATABASE_URL=xxx</span><br></pre></td></tr></table></figure>
+
+<h2 id="資料庫連線指令"><a href="#資料庫連線指令" class="headerlink" title="資料庫連線指令"></a>資料庫連線指令</h2><p>如果有需要連線進入資料庫，可以使用指令將自己的電腦變成代理伺服的方式進入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly proxy 5432 -a rest-db</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改服務數量"><a href="#修改服務數量" class="headerlink" title="修改服務數量"></a>修改服務數量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly scale count 2</span><br></pre></td></tr></table></figure>
+<p>如果當前服務數為2下指令為4會增加兩個服務,<br>反之如果當前服務為4下指令更改為2會減少兩個服務。</p>
+<h2 id="修改規格"><a href="#修改規格" class="headerlink" title="修改規格"></a>修改規格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly scale vm shared-cpu-2x</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改記憶體規格"><a href="#修改記憶體規格" class="headerlink" title="修改記憶體規格"></a>修改記憶體規格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly scale memory 1024</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看Fly-io所有規格"><a href="#查看Fly-io所有規格" class="headerlink" title="查看Fly.io所有規格"></a>查看Fly.io所有規格</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fly platform vm-sizes</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>參考資料<br><a target="_blank" rel="noopener" href="https://fly.io/docs/rails/getting-started/">fly.io官網</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/21/differenceBetweenP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -588,20 +710,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -639,8 +761,8 @@
 
 <div class="copyright">
   
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  &copy; 2023 – 
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
